@@ -28,25 +28,41 @@ const Image = ({ img, className = "img-grid" }) => {
     ></i>
   );
 
-  const [inCart, setInCart] = useState(false);
-  const [cartIconClass, setCartIconClass] = useState("ri-add-circle-line cart");
+  const [cartState, setCartState] = useState({
+    inCart: false,
+    cartIconClass: "ri-add-circle-line cart"
+  });
 
   const onCartIconClick = () => {
-    if (!inCart) {
+    if (!cartState.inCart) {
       addCartItem(img);
-      setCartIconClass("ri-shopping-cart-fill cart");
+      setCartIconClass("ri-shopping-cart-fill cart")
     } else {
       removeCartItem(img.id);
       setCartIconClass("ri-add-circle-line cart");
     }
-    setInCart(!inCart);
+    setCartState(prevCartState => {
+      return {
+        inCart: !prevCartState.inCart,
+        cartIconClass: prevCartState.cartIconClass
+      }
+    })
   };
 
-  const cartIcon = (hovering || inCart) && (
+  const setCartIconClass = (cartIconClass) => {
+    setCartState(prevCartState => {
+      return {
+        inCart: prevCartState.inCart,
+        cartIconClass: cartIconClass
+      };
+    });
+  }
+
+  const cartIcon = (hovering || cartState.inCart) && (
     <i
       onMouseEnter={onHoverEnter}
       onClick={onCartIconClick}
-      className={cartIconClass}
+      className={cartState.cartIconClass}
     ></i>
   );
 

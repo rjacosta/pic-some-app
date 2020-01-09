@@ -4,31 +4,35 @@ import PropTypes from "prop-types";
 import useHover from "../hooks/useHover";
 
 const Image = ({ img, className = "img-grid" }) => {
-
   const { toggleFavorite, addCartItem, removeCartItem } = useContext(Context);
   const [hovering, hoverRef] = useHover();
 
-  const [heartIconClass, setHeartIconClass] = useState("ri-heart-line");
+  const getHeartClass = isImgFavorite => {
+    return isImgFavorite ? "ri-heart-fill" : "ri-heart-line";
+  };
 
-  const toggleHeart = () => {
-    setHeartIconClass(img.isFavorite ? "ri-heart-line" : "ri-heart-fill")
-    toggleFavorite(img.id);
-  }
-
-  const heartIcon = (hovering || img.isFavorite) && <i onClick={toggleHeart} className={`${heartIconClass} favorite`}></i>
- 
-  const [cartIconClass, setCartIconClass] = useState(
-    img.inCart ? "ri-shopping-cart-fill" : "ri-add-circle-line"
+  const [heartIconClass, setHeartIconClass] = useState(
+    getHeartClass(img.isFavorite)
   );
 
+  const toggleHeart = () => {
+    toggleFavorite(img.id);
+    setHeartIconClass(getHeartClass(img.isFavorite));
+  };
+
+  const heartIcon = (hovering || img.isFavorite) && (
+    <i onClick={toggleHeart} className={`${heartIconClass} favorite`}></i>
+  );
+
+  const getCartClass = isImgInCart => {
+    return isImgInCart ? "ri-shopping-cart-fill" : "ri-add-circle-line";
+  };
+
+  const [cartIconClass, setCartIconClass] = useState(getCartClass(img.inCart));
+
   const onCartIconClick = () => {
-    if (!img.inCart) {
-      addCartItem(img);
-      setCartIconClass("ri-shopping-cart-fill");
-    } else {
-      removeCartItem(img.id);
-      setCartIconClass("ri-add-circle-line");
-    }
+    !img.inCart ? addCartItem(img) : removeCartItem(img.id);
+    setCartIconClass(getCartClass(img.inCart));
   };
 
   const cartIcon = (hovering || img.inCart) && (

@@ -33,12 +33,12 @@ const ContextProvider = ({ children }) => {
     })
   };
 
-  const isItemInCart = id => {
-    return cartItems.includes(item => parseInt(item.id) === id)
+  const emptyCart = () => {
+    setCartItems([]);
   }
 
   return (
-    <Context.Provider value={{ photos, toggleFavorite, cartItems, addCartItem, removeCartItem, isItemInCart }}>
+    <Context.Provider value={{ photos, toggleFavorite, cartItems, addCartItem, removeCartItem, emptyCart }}>
       {children}
     </Context.Provider>
   );

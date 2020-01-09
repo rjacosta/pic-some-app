@@ -21,15 +21,24 @@ const ContextProvider = ({ children }) => {
   };
 
   const addCartItem = img => {
+    img.inCart = true;
     setCartItems(prevCartItems => [...prevCartItems, img]);
   };
 
   const removeCartItem = id => {
-    setCartItems(prevCartItems => prevCartItems.filter(item => item.id !== id));
+    setCartItems(prevCartItems => {
+      const itemToRemove = prevCartItems.find(item => item.id === id)
+      itemToRemove.inCart = false;
+      return prevCartItems.filter(item => item.id !== id)
+    })
   };
 
+  const isItemInCart = id => {
+    return cartItems.includes(item => parseInt(item.id) === id)
+  }
+
   return (
-    <Context.Provider value={{ photos, toggleFavorite, cartItems, addCartItem, removeCartItem }}>
+    <Context.Provider value={{ photos, toggleFavorite, cartItems, addCartItem, removeCartItem, isItemInCart }}>
       {children}
     </Context.Provider>
   );

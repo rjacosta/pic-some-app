@@ -10,13 +10,13 @@ const Image = ({ img, className = "img-grid" }) => {
   const onHoverLeave = () => setHovering(false);
 
   const [heartClassName, setHeartClassName] = useState(
-    "ri-heart-line favorite"
+    img.isFavorite ? "ri-heart-fill" : "ri-heart-line"
   );
 
   const onHeartClick = () => {
     !img.isFavorite
-      ? setHeartClassName("ri-heart-fill favorite")
-      : setHeartClassName("ri-heart-line favorite");
+      ? setHeartClassName("ri-heart-fill")
+      : setHeartClassName("ri-heart-line");
     toggleFavorite(img.id);
   };
 
@@ -24,29 +24,28 @@ const Image = ({ img, className = "img-grid" }) => {
     <i
       onMouseEnter={onHoverEnter}
       onClick={onHeartClick}
-      className={heartClassName}
+      className={`${heartClassName} favorite`}
     ></i>
   );
 
-  const [inCart, setInCart] = useState(false);
-  const [cartIconClass, setCartIconClass] = useState("ri-add-circle-line cart");
+  const [cartIconClass, setCartIconClass] = useState(
+    img.inCart ? "ri-shopping-cart-fill" : "ri-add-circle-line");
 
   const onCartIconClick = () => {
-    if (!inCart) {
+    if (!img.inCart) {
       addCartItem(img);
-      setCartIconClass("ri-shopping-cart-fill cart");
+      setCartIconClass("ri-shopping-cart-fill");
     } else {
       removeCartItem(img.id);
-      setCartIconClass("ri-add-circle-line cart");
+      setCartIconClass("ri-add-circle-line");
     }
-    setInCart(!inCart);
   };
 
-  const cartIcon = (hovering || inCart) && (
+  const cartIcon = (hovering || img.inCart) && (
     <i
       onMouseEnter={onHoverEnter}
       onClick={onCartIconClick}
-      className={cartIconClass}
+      className={`${cartIconClass} cart`}
     ></i>
   );
 

@@ -28,6 +28,7 @@ const Image = ({ img, className = "img-grid" }) => {
     ></i>
   );
 
+<<<<<<< HEAD
   const [cartIconClass, setCartIconClass] = useState(
     img.inCart ? "ri-shopping-cart-fill" : "ri-add-circle-line");
 
@@ -35,10 +36,22 @@ const Image = ({ img, className = "img-grid" }) => {
     if (!img.inCart) {
       addCartItem(img);
       setCartIconClass("ri-shopping-cart-fill");
+=======
+  const [cartState, setCartState] = useState({
+    inCart: false,
+    cartIconClass: "ri-add-circle-line cart"
+  });
+
+  const onCartIconClick = () => {
+    if (!cartState.inCart) {
+      addCartItem(img);
+      setCartIconClass("ri-shopping-cart-fill cart")
+>>>>>>> b573150d0133d967736ff64ae1f94eea1c52fa1e
     } else {
       removeCartItem(img.id);
       setCartIconClass("ri-add-circle-line");
     }
+<<<<<<< HEAD
   };
 
   const cartIcon = (hovering || img.inCart) && (
@@ -46,6 +59,30 @@ const Image = ({ img, className = "img-grid" }) => {
       onMouseEnter={onHoverEnter}
       onClick={onCartIconClick}
       className={`${cartIconClass} cart`}
+=======
+    setCartState(prevCartState => {
+      return {
+        inCart: !prevCartState.inCart,
+        cartIconClass: prevCartState.cartIconClass
+      }
+    })
+  };
+
+  const setCartIconClass = (cartIconClass) => {
+    setCartState(prevCartState => {
+      return {
+        inCart: prevCartState.inCart,
+        cartIconClass: cartIconClass
+      };
+    });
+  }
+
+  const cartIcon = (hovering || cartState.inCart) && (
+    <i
+      onMouseEnter={onHoverEnter}
+      onClick={onCartIconClick}
+      className={cartState.cartIconClass}
+>>>>>>> b573150d0133d967736ff64ae1f94eea1c52fa1e
     ></i>
   );
 

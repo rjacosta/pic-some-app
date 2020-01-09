@@ -1,35 +1,25 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../Context";
 import PropTypes from "prop-types";
+import useHover from "../hooks/useHover";
 
 const Image = ({ img, className = "img-grid" }) => {
+
   const { toggleFavorite, addCartItem, removeCartItem } = useContext(Context);
+  const [hovering, hoverRef] = useHover();
 
-  const [hovering, setHovering] = useState(false);
-  const onHoverEnter = () => setHovering(true);
-  const onHoverLeave = () => setHovering(false);
+  const [heartIconClass, setHeartIconClass] = useState("ri-heart-line");
 
-  const [heartClassName, setHeartClassName] = useState(
-    img.isFavorite ? "ri-heart-fill" : "ri-heart-line"
-  );
-
-  const onHeartClick = () => {
-    !img.isFavorite
-      ? setHeartClassName("ri-heart-fill")
-      : setHeartClassName("ri-heart-line");
+  const toggleHeart = () => {
+    setHeartIconClass(img.isFavorite ? "ri-heart-line" : "ri-heart-fill")
     toggleFavorite(img.id);
-  };
+  }
 
-  const heartIcon = (hovering || img.isFavorite) && (
-    <i
-      onMouseEnter={onHoverEnter}
-      onClick={onHeartClick}
-      className={`${heartClassName} favorite`}
-    ></i>
-  );
-
+  const heartIcon = (hovering || img.isFavorite) && <i onClick={toggleHeart} className={`${heartIconClass} favorite`}></i>
+ 
   const [cartIconClass, setCartIconClass] = useState(
-    img.inCart ? "ri-shopping-cart-fill" : "ri-add-circle-line");
+    img.inCart ? "ri-shopping-cart-fill" : "ri-add-circle-line"
+  );
 
   const onCartIconClick = () => {
     if (!img.inCart) {
@@ -42,22 +32,12 @@ const Image = ({ img, className = "img-grid" }) => {
   };
 
   const cartIcon = (hovering || img.inCart) && (
-    <i
-      onMouseEnter={onHoverEnter}
-      onClick={onCartIconClick}
-      className={`${cartIconClass} cart`}
-    ></i>
+    <i onClick={onCartIconClick} className={`${cartIconClass} cart`}></i>
   );
 
   return (
-    <div className={`${className} image-container`}>
-      <img
-        onMouseEnter={onHoverEnter}
-        onMouseLeave={onHoverLeave}
-        alt={img.id}
-        src={img.url}
-        className="image-grid"
-      />
+    <div className={`${className} image-container`} ref={hoverRef}>
+      <img alt={img.id} src={img.url} className="image-grid" />
       {heartIcon}
       {cartIcon}
     </div>

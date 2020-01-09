@@ -34,7 +34,10 @@ const ContextProvider = ({ children }) => {
   };
 
   const emptyCart = () => {
-    setCartItems([]);
+    setCartItems(prevCartItems => {
+      prevCartItems.forEach(item => item.inCart = false)
+      return [];
+    })
   }
 
   return (
